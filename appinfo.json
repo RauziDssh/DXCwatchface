@@ -1,0 +1,25 @@
+{
+    "appKeys": {},
+    "capabilities": [
+        ""
+    ],
+    "companyName": "rauzi.eee@gmail.com",
+    "longName": "test",
+    "projectType": "native",
+    "resources": {
+        "media": [
+            {
+                "file": "images/CHANX",
+                "name": "CHANX",
+                "type": "png"
+            }
+        ]
+    },
+    "sdkVersion": "3",
+    "shortName": "test",
+    "uuid": "611c9700-3f6c-42b1-ae66-969f8aacfa0d",
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": false
+    }
+}
