@@ -9,6 +9,11 @@
     "resources": {
         "media": [
             {
+                "file": "images/CHANXeyeclose",
+                "name": "CHANX_EYECLOSE",
+                "type": "png"
+            },
+            {
                 "file": "images/CHANX",
                 "name": "CHANX",
                 "type": "png"
@@ -17,6 +22,9 @@
     },
     "sdkVersion": "3",
     "shortName": "test",
+    "targetPlatforms": [
+        "basalt"
+    ],
     "uuid": "611c9700-3f6c-42b1-ae66-969f8aacfa0d",
     "versionLabel": "1.0",
     "watchapp": {

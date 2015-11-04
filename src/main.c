@@ -1,17 +1,25 @@
 #include <pebble.h>
 
+#include <stdlib.h>
+#include<math.h>
+
 static Window *s_main_window;
+static Layer *window_layer;
 static TextLayer *s_time_layer;
 
 static BitmapLayer *s_background_layer;
+
 static GBitmap *s_background_bitmap;
+static GBitmap *s_background2_bitmap;
 
 static void main_window_load(Window *window){
-  Layer *window_layer = window_get_root_layer(window);
+  window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
   
   // Create GBitmap
   s_background_bitmap = gbitmap_create_with_resource(RESOURCE_ID_CHANX);
+  s_background2_bitmap = gbitmap_create_with_resource(RESOURCE_ID_CHANX_EYECLOSE);
+  
   // Create BitmapLayer to display the GBitmap
   s_background_layer = bitmap_layer_create(bounds);
   // Set the bitmap onto the layer and add to the window
@@ -49,6 +57,22 @@ static void tick_handler(struct tm *tick_time,TimeUnits units_changed){
   update_time();
 }
 
+bool brink;
+AppTimer *timer;
+
+void timer_callback(){
+  bitmap_layer_set_bitmap(s_background_layer, s_background_bitmap);
+}
+
+static void brink_handler(struct tm *t,TimeUnits u){
+  if(rand() % 10 < 2){
+    bitmap_layer_set_bitmap(s_background_layer, s_background2_bitmap);
+    timer = app_timer_register(rand() % 150, timer_callback, NULL);
+  }else{
+    bitmap_layer_set_bitmap(s_background_layer, s_background_bitmap);
+  }
+}
+
 void handle_init(void) {
   s_main_window = window_create();
   window_set_window_handlers(s_main_window, (WindowHandlers) {
@@ -56,6 +80,10 @@ void handle_init(void) {
     .unload = main_window_unload
   });
   tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
+  
+  srand(time(NULL));
+  tick_timer_service_subscribe(SECOND_UNIT, brink_handler);
+  
   window_stack_push(s_main_window, true);
   window_set_background_color(s_main_window, GColorWhite);
   update_time();
