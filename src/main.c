@@ -53,10 +53,6 @@ static void update_time(){
   text_layer_set_text(s_time_layer, s_buffer);
 }
 
-static void tick_handler(struct tm *tick_time,TimeUnits units_changed){
-  update_time();
-}
-
 bool brink;
 AppTimer *timer;
 
@@ -64,14 +60,20 @@ void timer_callback(){
   bitmap_layer_set_bitmap(s_background_layer, s_background_bitmap);
 }
 
-static void brink_handler(struct tm *t,TimeUnits u){
-  if(rand() % 10 < 2){
+static void fbrink(void){
+   if(rand() % 10 < 2){
     bitmap_layer_set_bitmap(s_background_layer, s_background2_bitmap);
-    timer = app_timer_register(rand() % 150, timer_callback, NULL);
+    timer = app_timer_register((rand() % 150) + 10, timer_callback, NULL);
   }else{
     bitmap_layer_set_bitmap(s_background_layer, s_background_bitmap);
   }
 }
+
+static void tick_handler(struct tm *tick_time,TimeUnits units_changed){
+  update_time();
+  fbrink();
+}
+
 
 void handle_init(void) {
   s_main_window = window_create();
@@ -79,11 +81,11 @@ void handle_init(void) {
     .load = main_window_load,
     .unload = main_window_unload
   });
-  tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
-  
+
   srand(time(NULL));
-  tick_timer_service_subscribe(SECOND_UNIT, brink_handler);
-  
+  //tick_timer_service_subscribe(SECOND_UNIT, brink_handler);
+  tick_timer_service_subscribe(SECOND_UNIT, tick_handler);
+    
   window_stack_push(s_main_window, true);
   window_set_background_color(s_main_window, GColorWhite);
   update_time();
